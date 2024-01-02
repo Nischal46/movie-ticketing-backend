@@ -10,12 +10,5 @@ exports.LoginUser = handleAsyncAwait(async (req, res, next) => {
 
   if(!email || !password) return next(new AppError('Please provide Email or PAssword', 400));
 
-  const user = await userDTO.findOne({email}).select('+password');
-
-  if(!user || !(await user.checkPassword)) return next(new AppError('Incorrect Email or Password', 401));
-
-  res.status(200).json({
-    status: 'success',
-    mssage: "Login success"
-  })
+  
 });

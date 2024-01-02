@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const filimController = require("./../controller/filimController");
+const authController = require('./../controller/authenticationController');
 
 router
   .route("/")
   .post(filimController.createMovie)
-  .get(filimController.getAllMovie);
+  .get(authController.protect, filimController.getAllMovie);
 
 router
   .route("/:id")

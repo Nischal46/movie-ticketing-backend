@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 
+const dotenv = require('dotenv');
+dotenv.config({path: "./.env"})
+
 const filimRoute = require("./route/filimRoute");
 const userRoute = require("./route/userRoute");
 const handleGlobalError = require('./controller/errorController')
