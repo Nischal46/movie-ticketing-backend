@@ -9,7 +9,7 @@ router
 
 router
   .route("/:id")
-  .get(filimController.getMovie)
+  .get(authController.protect, authController.permission_access('user') ,filimController.getMovie)
   .patch(filimController.updateMovie)
   .delete(filimController.deleteMovie);
 
