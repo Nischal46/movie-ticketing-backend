@@ -38,4 +38,10 @@ exports.protect = handleAsyncAwait(async (req, res, next) => {
 
 });
 
-exports.permission_access = () => { };
+exports.permission_access = (...roles) => {
+    return (req, res, next) => {
+        if(!roles.includes(req.user.role)) return next(new AppError('You donot have permissions', 401));
+
+        next();
+    }
+};
