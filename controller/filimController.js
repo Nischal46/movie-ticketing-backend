@@ -7,7 +7,7 @@ const {
   deleteDocument,
 } = require("./../reusable/handleFactoryFunction");
 
-exports.createMovie = createDocument(filimDTO);
+exports.createMovie = createDocument(filimDTO, 'Filim_DB');
 exports.getAllMovie = getDocument(filimDTO);
 exports.getMovie = getDocument(filimDTO);
 exports.updateMovie = updateDocument(filimDTO);

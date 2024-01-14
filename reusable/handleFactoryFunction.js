@@ -1,4 +1,7 @@
 const handleAsyncAwait = require("./handleAsyncAwait");
+const cloudinary = require('./cloudinary');
+const fs = require('fs');
+const AppError = require("./handleAppError");
 
 const handleSuccessResponse = (statusCode, document, res) => {
   if (statusCode === 400) {
@@ -28,7 +31,23 @@ exports.createDocument = (Model, db_sensitive) =>
       });
 
       handleSuccessResponse(201, document, res);
-    } else {
+    }
+    else if(db_sensitive === "Filim_DB"){
+      const photoresponse = await cloudinary.uploader.upload(req.file.path);
+
+      fs.unlink(req.file.path, function(err){
+        if(err) return next(new AppError('Error encounter while deleting', 400));
+        console.log('Deleted successfully');
+      })
+
+      const imageSource = photoresponse.url;
+
+      const { movieName, movieCast, genre, release_date, duration, imageCover, price} = req.body;
+
+      const document = await Model.create({ movieName, movieCast, genre, release_date, duration, imageCover: imageSource, price});
+      handleSuccessResponse(201, document, res);
+    }
+    else {
       const document = await Model.create(req.body);
       handleSuccessResponse(201, document, res);
     }

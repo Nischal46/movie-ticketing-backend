@@ -17,7 +17,7 @@ const filimSchema = new mongoose.Schema({
   },
 
   release_date: {
-    type: Date,
+    type: String,
     required: [true, "Please specify movie release date"],
   },
 

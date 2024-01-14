@@ -2,10 +2,12 @@ const router = require("express").Router();
 const filimController = require("./../controller/filimController");
 const authController = require('./../controller/authenticationController');
 
+const upload = require('./../reusable/multer');
+
 router
   .route("/")
-  .post(filimController.createMovie)
-  .get(authController.protect, filimController.getAllMovie);
+  .post(upload, filimController.createMovie)
+  .get(filimController.getAllMovie);
 
 router
   .route("/:id")
