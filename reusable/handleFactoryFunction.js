@@ -40,7 +40,7 @@ exports.getDocument = (Model) => {
 
     if (req.params.id) filter = { _id: req.params.id };
 
-    console.log(filter);
+    console.log('filter the param request:', filter);
     const document = await Model.find(filter);
 
     if (!document)
