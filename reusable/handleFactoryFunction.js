@@ -21,7 +21,7 @@ exports.createDocument = (Model, db_sensitive) =>
     if (db_sensitive === "User_DB") {
       console.log("hitt");
       const { name, email, password, contact, confirmPassword } = req.body;
-      console.log(req.body);
+      console.log(req.body, req.body);
       const document = await Model.create({
         name,
         email,
