@@ -40,6 +40,7 @@ exports.createDocument = (Model, db_sensitive) =>
         console.log('Deleted successfully');
       })
 
+      //photo response got from the cloudinary
       const imageSource = photoresponse.url;
 
       const { movieName, movieCast, genre, release_date, duration, imageCover, price} = req.body;
