@@ -34,6 +34,12 @@ const filimSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Pleae specify movie price"],
   },
+
+  status: {
+    type: String,
+    enum: ['now showing', 'coming soon'],
+    default: 'now showing'
+  }
 });
 
 const filimDTO = mongoose.model("Filim_DB", filimSchema);

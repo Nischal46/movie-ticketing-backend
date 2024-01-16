@@ -31,6 +31,6 @@ app.use('*', (req, res, next) => {
 
 app.use(handleGlobalError);
 
-app.listen(3000, function () {
+app.listen(8000, function () {
   console.log("App is running in port");
 });
