@@ -9,9 +9,7 @@ const handleSuccessResponse = (statusCode, document, res) => {
   } else {
     res.status(statusCode).json({
       status: "success",
-      data: {
-        data: document,
-      },
+      data: document
     });
   }
 };
@@ -56,12 +54,16 @@ exports.createDocument = (Model, db_sensitive) =>
 
 exports.getDocument = (Model) => {
   return handleAsyncAwait(async (req, res, next) => {
-    let filter = {};
+    // let filter = {};
+    let document;
 
-    if (req.params.id) filter = { _id: req.params.id };
+    if (req.params.id) document = await Model.findById(req.params.id);
 
-    console.log(filter);
-    const document = await Model.find(filter);
+    // console.log(filter);
+    else{
+
+      document = await Model.find();
+    }
 
     if (!document)
       return res.status(400).json({
