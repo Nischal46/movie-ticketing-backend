@@ -38,7 +38,7 @@ const filimSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['now showing', 'coming soon'],
-    default: 'now showing'
+    default: 'coming soon'
   }
 });
 

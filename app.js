@@ -17,7 +17,7 @@ const AppError = require("./reusable/handleAppError");
 const corsOptions = {
   credentials: true,
   origin: '*',
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  // allowedHeaders: ['Content-Type', 'Authorization'],
 }
 
 app.use(express.json());
