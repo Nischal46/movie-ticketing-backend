@@ -41,9 +41,27 @@ exports.protect = handleAsyncAwait(async (req, res, next) => {
 
 });
 
+exports.getMe = handleAsyncAwait(async(req, res, next) => {
+    let token;
+    if(req.cookies) token = req.cookies.moviejwt;
+    log(token);
+
+    const verify_jwt = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    const me = await userDTO.findById(verify_jwt.id);
+    if(!me) return next(new AppError('Token is missing. Please Login', 401));
+
+    res.status(200).json({
+        status: 'success',
+        data: me
+    })
+})
+
 exports.permission_access = (...roles) => {
     return (req, res, next) => {
-        if(!roles.includes(req.user.role)) return next(new AppError('You donot have permissions', 401));
+        if(!roles.includes(req.user.role)){
+            return next(new AppError('You donot have permissions', 401))
+        };
 
         next();
     }
