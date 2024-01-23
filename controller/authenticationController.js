@@ -2,8 +2,9 @@ const AppError = require("../reusable/handleAppError");
 const handleAsyncAwait = require("../reusable/handleAsyncAwait");
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
-const createSendToken = require('./../reusable/sendToken');
+const sendToken = require('./../reusable/sendToken');
 const userDTO = require("../model/userModel");
+const { log } = require("console");
 
 
 exports.login = handleAsyncAwait(async (req, res, next) => {
@@ -14,8 +15,9 @@ exports.login = handleAsyncAwait(async (req, res, next) => {
     const user = await userDTO.findOne({ email }).select('+password');
 
     if (!user || !(await user.checkPassword)) return next(new AppError('Incorrect Email or Password', 401));
+    
 
-    createSendToken(user, 200, res)
+   sendToken(200, user, res)
 
 })
 
@@ -23,6 +25,7 @@ exports.login = handleAsyncAwait(async (req, res, next) => {
 exports.protect = handleAsyncAwait(async (req, res, next) => {
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) token = req.headers.authorization.split(' ')[1];
+    else if(req.cookies) token = req.cookies.moviejwt;
 
     if (!token) return next(new AppError('You are not logged in. Please Log in first', 404));
 
