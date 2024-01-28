@@ -18,12 +18,18 @@ const bookingSchema = new mongoose.Schema({
 
     seatNo: {
         type: [String],
+        unique: true,
         required: [true, 'seatNo missing for booking movie']
     },
 
     createdAt: {
         type: Date,
         default: Date.now()
+    },
+
+    bookingDate: {
+        type: Date,
+        required: [true, "Booking date is missing"]
     },
     paid: {
         type: Boolean,
@@ -33,9 +39,12 @@ const bookingSchema = new mongoose.Schema({
 })
 
 bookingSchema.pre(/^find/, function(next){
-    this.populate('user').populate({
+    this.populate({
+        path: 'user',
+        select: 'name email contact -_id'
+    }).populate({
         path: 'filim',
-        select: 'movieName'
+        select: 'movieName -_id'
     })
     next();
 })
