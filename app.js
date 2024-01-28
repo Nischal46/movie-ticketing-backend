@@ -8,6 +8,7 @@ dotenv.config({path: "./.env"})
 
 const filimRoute = require("./route/filimRoute");
 const userRoute = require("./route/userRoute");
+const bookRoute = require('./route/bookingRoute')
 const handleGlobalError = require('./controller/errorController')
 
 const DB = require("./database/dbconnection");
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 
 app.use("/api/v1/filim", filimRoute);
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/booking", bookRoute)
 
 app.use('*', (req, res, next) => {
   next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404))

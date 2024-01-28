@@ -44,8 +44,6 @@ exports.protect = handleAsyncAwait(async (req, res, next) => {
 exports.getMe = handleAsyncAwait(async(req, res, next) => {
     let token;
     if(req.cookies) token = req.cookies.moviejwt;
-    log(token);
-
     const verify_jwt = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
     const me = await userDTO.findById(verify_jwt.id);
