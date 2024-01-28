@@ -24,8 +24,7 @@ exports.login = handleAsyncAwait(async (req, res, next) => {
 
 exports.protect = handleAsyncAwait(async (req, res, next) => {
     let token;
-    console.log(req.headers);
-    console.log(req.cookies);
+
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) token = req.headers.authorization.split(' ')[1];
     else if(req.cookies) token = req.cookies.moviejwt;
 
@@ -34,7 +33,7 @@ exports.protect = handleAsyncAwait(async (req, res, next) => {
     const veryfying_jwt = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
     const currentUser = await userDTO.findById(veryfying_jwt.id);
-    console.log(currentUser);
+
     if(!currentUser) return next(new AppError('Not existance of token to user', 401));
 
     req.user = currentUser;
