@@ -27,6 +27,11 @@ const bookingSchema = new mongoose.Schema({
         default: Date.now()
     },
 
+    showTime: {
+        type: String,
+        required: [true, 'Show time is missing']
+    },
+
     bookingDate: {
         type: Date,
         required: [true, "Booking date is missing"]

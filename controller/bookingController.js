@@ -4,9 +4,9 @@ const BookingDTO = require('./../model/bookingModel');
 const filimDTO = require('../model/filimModel');
 
 exports.createBooking = handleAsyncAwait(async (req, res, next) => {
-   const {filim, user, price, seatNo, bookingDate} = req.body;
+   const {filim, user, price, seatNo, bookingDate, showTime} = req.body;
     const bookData = await BookingDTO.create({
-        filim, user: req.user._id, price, seatNo, bookingDate
+        filim, user: req.user._id, price, seatNo, bookingDate, showTime
     })
 
     res.status(200).json({
@@ -26,11 +26,9 @@ exports.getBooking = handleAsyncAwait(async (req, res, next) => {
 })
 
 exports.checkSeaatAVailability = handleAsyncAwait(async (req, res, next) => {
-        const {filmName, date} = req.body;
+        const {filmName, date, showTime} = req.body;
 
-        console.log(filmName);
-
-        const film = await filimDTO.findOne({ _id: filmName }); // Assuming Filim_DB is your film model
+        const film = await filimDTO.findOne({ _id: filmName });
 
         if (!film) {
             return res.status(404).json({
@@ -43,14 +41,10 @@ exports.checkSeaatAVailability = handleAsyncAwait(async (req, res, next) => {
             {
                 $match: {
                     filim: film._id,
-                    "bookingDate": { $eq: new Date(date) }
+                    "bookingDate": { $eq: new Date(date) },
+                    showTime: "10:00 to 12:00"
                 }
             },
-            // {
-            //     $match: {
-            //         "bookingDate": { $eq: new Date(date) }
-            //     }
-            // },
             {
                 $unwind: "$seatNo"
             },
@@ -68,5 +62,4 @@ exports.checkSeaatAVailability = handleAsyncAwait(async (req, res, next) => {
             status: 'success',
             data: result
         })
-
 })
