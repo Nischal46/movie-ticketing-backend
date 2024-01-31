@@ -39,6 +39,10 @@ const bookingSchema = new mongoose.Schema({
     paid: {
         type: Boolean,
         default: true
+    },
+    transactionId: {
+        type: String,
+        required: [true, 'Transaction ID is missing']
     }
 
 })
