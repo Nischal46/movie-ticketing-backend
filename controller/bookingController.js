@@ -53,9 +53,11 @@ exports.getBooking = handleAsyncAwait(async (req, res, next) => {
 })
 
 exports.checkSeaatAVailability = handleAsyncAwait(async (req, res, next) => {
-        const {filmName, date, showTime} = req.body;
+        const {filmName, date, time} = req.body;
 
         const film = await filimDTO.findOne({ _id: filmName });
+
+        console.log(time);
 
         if (!film) {
             return res.status(404).json({
@@ -68,8 +70,8 @@ exports.checkSeaatAVailability = handleAsyncAwait(async (req, res, next) => {
             {
                 $match: {
                     filim: film._id,
-                    "bookingDate": { $eq: new Date(date) },
-                    showTime: "10:00 to 12:00"
+                    bookingDate: { $eq: date },
+                    showTime: { $eq: time }
                 }
             },
             {

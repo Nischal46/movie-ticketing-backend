@@ -33,7 +33,7 @@ const bookingSchema = new mongoose.Schema({
     },
 
     bookingDate: {
-        type: Date,
+        type: String,
         required: [true, "Booking date is missing"]
     },
     paid: {
