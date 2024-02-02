@@ -1,7 +1,18 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const http = require('http');
+const {Server} = require('socket.io');
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+      origin: ["http://localhost:5173"],
+
+  }
+});
+
 
 const dotenv = require('dotenv');
 dotenv.config({path: "./.env"})
@@ -21,6 +32,7 @@ const corsOptions = {
   // allowedHeaders: ['Content-Type', 'Authorization'],
 }
 
+
 app.use(express.json());
 
 
@@ -33,6 +45,7 @@ app.use(cors({
   methods: 'GET, POST, PUT, DELETE, PATCH, HEAD',
   credentials: true
 }));
+
 app.use(cookieParser());
 
 app.use((req, res, next) => {
@@ -41,6 +54,22 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
+});
+
+console.log(io);
+
+io.on("connection", (socket) => {
+  console.log('a user connected');
+  // console.log(socket.handshake);
+
+  socket.on('recordAction', (data) => {
+    console.log('Action recorded:', data.action);
+    socket.emit('actionRecorded', 'Action recorded successfully'); // Send confirmation back to the client
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
 });
 
 
@@ -55,6 +84,6 @@ app.use('*', (req, res, next) => {
 
 app.use(handleGlobalError);
 
-app.listen(8000, function () {
+server.listen(8000, function () {
   console.log("App is running in port");
 });
