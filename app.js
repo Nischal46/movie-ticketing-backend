@@ -56,19 +56,29 @@ app.use((req, res, next) => {
   next();
 });
 
-console.log(io);
+// console.log(io);
+
+let totaluser = 0;
+
+const firstconnection = io.of('/connection1');
+const secondconnection = io.of('/connection2');
+const thirdconnection = io.of('/connection3');
+const fourthconnection = io.of('/connection4');
 
 io.on("connection", (socket) => {
-  console.log('a user connected');
+  // console.log('a user connected');
   // console.log(socket.handshake);
-
-  socket.on('recordAction', (data) => {
+  // totaluser++;
+  // console.log('total user connected are', totaluser);
+  socket.on('recordAction', function (data){
+    console.log(data);
     console.log('Action recorded:', data.action);
-    socket.emit('actionRecorded', 'Action recorded successfully'); // Send confirmation back to the client
+    socket.emit('actionRecorded', 'Action recorded successfully'); // send back to one client
+    io.emit('alert', [data.action, data.user]) // Send confirmation back to all client
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    // console.log('user disconnected');
   });
 });
 
