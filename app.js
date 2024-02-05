@@ -65,23 +65,40 @@ const secondconnection = io.of('/connection2');
 const thirdconnection = io.of('/connection3');
 const fourthconnection = io.of('/connection4');
 
+let clientresponse = {}
+let userid = []
+
+
+
+
 io.on("connection", (socket) => {
-  // console.log('a user connected');
-  // console.log(socket.handshake);
-  // totaluser++;
-  // console.log('total user connected are', totaluser);
   socket.on('recordAction', function (data){
-    console.log(data);
-    console.log('Action recorded:', data.action);
-    socket.emit('actionRecorded', 'Action recorded successfully'); // send back to one client
-    io.emit('alert', [data.action, data.user]) // Send confirmation back to all client
+    const { action, user } = data;
+
+    if (!userid.includes(user)) {
+      userid.push(user);
+    }
+
+    if (!clientresponse[user]) {
+      clientresponse[user] = []; // Initialize array for the user if it doesn't exist
+    }
+    // clientresponse[user] = {...clientresponse, action}
+    clientresponse[user].push(action);
+    clientresponse[user] = clientresponse[user][clientresponse[user].length - 1];
+
+    // console.log('the object of the response ', clientresponse);
+
+    const responseJSON = clientresponse;
+
+    console.log(responseJSON);
+
+    io.emit('alert', responseJSON);
   });
 
   socket.on('disconnect', () => {
-    // console.log('user disconnected');
+    // Handle disconnection if needed
   });
 });
-
 
 app.use("/api/v1/filim", filimRoute);
 app.use("/api/v1/user", userRoute);
