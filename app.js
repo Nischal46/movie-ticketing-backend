@@ -3,15 +3,16 @@ const app = express();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const http = require('http');
-const {Server} = require('socket.io');
+// const {Server} = require('socket.io');
+const setupSocketConnectionServer = require('./reusable/handleSocket')
 
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-      origin: ["http://localhost:5173"],
+// const io = new Server(server, {
+//   cors: {
+//       origin: ["http://localhost:5173"],
 
-  }
-});
+//   }
+// });
 
 
 const dotenv = require('dotenv');
@@ -56,49 +57,51 @@ app.use((req, res, next) => {
   next();
 });
 
+setupSocketConnectionServer(server);
+
 // console.log(io);
 
-let totaluser = 0;
+// let totaluser = 0;
 
-const firstconnection = io.of('/connection1');
-const secondconnection = io.of('/connection2');
-const thirdconnection = io.of('/connection3');
-const fourthconnection = io.of('/connection4');
+// const firstconnection = io.of('/connection1');
+// const secondconnection = io.of('/connection2');
+// const thirdconnection = io.of('/connection3');
+// const fourthconnection = io.of('/connection4');
 
-let clientresponse = {}
-let userid = []
-
-
+// let clientresponse = {}
+// let userid = []
 
 
-io.on("connection", (socket) => {
-  socket.on('recordAction', function (data){
-    const { action, user } = data;
 
-    if (!userid.includes(user)) {
-      userid.push(user);
-    }
 
-    if (!clientresponse[user]) {
-      clientresponse[user] = []; // Initialize array for the user if it doesn't exist
-    }
-    // clientresponse[user] = {...clientresponse, action}
-    clientresponse[user].push(action);
-    clientresponse[user] = clientresponse[user][clientresponse[user].length - 1];
+// io.on("connection", (socket) => {
+//   socket.on('recordAction', function (data){
+//     const { action, user } = data;
 
-    // console.log('the object of the response ', clientresponse);
+//     if (!userid.includes(user)) {
+//       userid.push(user);
+//     }
 
-    const responseJSON = clientresponse;
+//     if (!clientresponse[user]) {
+//       clientresponse[user] = []; // Initialize array for the user if it doesn't exist
+//     }
+//     // clientresponse[user] = {...clientresponse, action}
+//     clientresponse[user].push(action);
+//     clientresponse[user] = clientresponse[user][clientresponse[user].length - 1];
 
-    console.log(responseJSON);
+//     // console.log('the object of the response ', clientresponse);
 
-    io.emit('alert', responseJSON);
-  });
+//     const responseJSON = clientresponse;
 
-  socket.on('disconnect', () => {
-    // Handle disconnection if needed
-  });
-});
+//     console.log(responseJSON);
+
+//     io.emit('alert', responseJSON);
+//   });
+
+//   socket.on('disconnect', () => {
+//     // Handle disconnection if needed
+//   });
+// });
 
 app.use("/api/v1/filim", filimRoute);
 app.use("/api/v1/user", userRoute);
