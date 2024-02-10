@@ -18,7 +18,7 @@ function setupSocketConnectionServer(server){
 
         // console.log(conn, socket)
         socket.on('recordAction', function (data){
-            const { action, user } = data;
+            const { action, user, date, time } = data;
         
             if (!userid.includes(user)) {
               userid.push(user);
@@ -36,14 +36,14 @@ function setupSocketConnectionServer(server){
 
             // clientresponse[user][connectionNo].push({action, connectionNo})
         
-            clientresponse[user].push({action, connectionNo});
+            clientresponse[user].push({action, connectionNo, date, time});
             // clientresponse[user] = clientresponse[user][clientresponse[user].length - 1];
         
             const responseJSON = clientresponse;
         
             console.log('the response is', clientresponse);
         
-            conn.emit('alert', clientresponse);
+            io.emit('alert', clientresponse);
           });
         
           socket.on('disconnect', () => {
