@@ -18,32 +18,34 @@ function setupSocketConnectionServer(server){
 
         // console.log(conn, socket)
         socket.on('recordAction', function (data){
-            const { action, user, date, time } = data;
+            const { action, user, date, time, movie } = data;
         
-            if (!userid.includes(user)) {
-              userid.push(user);
-            }
+            // if (!userid.includes(user)) {
+            //   userid.push(user);
+            // }
         
-            if (!clientresponse[user]) {
+            if (!clientresponse[movie]) {
             // clientresponse[user] = {}; // Initialize array for the user if it doesn't exist
-            clientresponse[user] = []
+            clientresponse[movie] = []
             }
 
-            // if (!clientresponse[user][connectionNo]) {
-            //     clientresponse[user][connectionNo] = [];
-            // }
+            // // if (!clientresponse[user][connectionNo]) {
+            // //     clientresponse[user][connectionNo] = [];
+            // // }
             
 
-            // clientresponse[user][connectionNo].push({action, connectionNo})
+            // // clientresponse[user][connectionNo].push({action, connectionNo})
         
-            clientresponse[user].push({action, connectionNo, date, time});
-            // clientresponse[user] = clientresponse[user][clientresponse[user].length - 1];
+            // clientresponse[movie].push({action, connectionNo, date, time});
+            // const lastobject = clientresponse[user][clientresponse[user].length - 1];
         
-            const responseJSON = clientresponse;
+            // const responseJSON = clientresponse;
+
+            clientresponse[movie] = {action, date, time, user}
         
             console.log('the response is', clientresponse);
         
-            io.emit('alert', clientresponse);
+            io.emit('alert', [{action, user, date, time, movie}]);
           });
         
           socket.on('disconnect', () => {
