@@ -20,32 +20,17 @@ function setupSocketConnectionServer(server){
         socket.on('recordAction', function (data){
             const { action, user, date, time, movie } = data;
         
-            // if (!userid.includes(user)) {
-            //   userid.push(user);
-            // }
-        
             if (!clientresponse[movie]) {
             // clientresponse[user] = {}; // Initialize array for the user if it doesn't exist
             clientresponse[movie] = []
             }
-
-            // // if (!clientresponse[user][connectionNo]) {
-            // //     clientresponse[user][connectionNo] = [];
-            // // }
-            
-
-            // // clientresponse[user][connectionNo].push({action, connectionNo})
-        
-            // clientresponse[movie].push({action, connectionNo, date, time});
-            // const lastobject = clientresponse[user][clientresponse[user].length - 1];
-        
-            // const responseJSON = clientresponse;
 
             clientresponse[movie] = {action, date, time, user}
         
             console.log('the response is', clientresponse);
         
             io.emit('alert', [{action, user, date, time, movie}]);
+            // io.emit('alert', clientresponse);
           });
         
           socket.on('disconnect', () => {
